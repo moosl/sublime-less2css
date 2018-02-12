@@ -103,15 +103,15 @@ class Compiler:
         # check if an output file has been specified
         output_file = self.settings.get('output_file', '')
         if output_file:
-            return output_file if output_file.endswith('.css') else \
-                '{}.css'.format(output_file)
+            return output_file if output_file.endswith('.wxss') else \
+                '{}.wxss'.format(output_file)
         else:
             # when no output file is specified we take the name of the less
-            # file and substitute .less with .css
+            # file and substitute .less with .wxss
             if self.settings['min_name']:
-                return re.sub('\.less$', '.min.css', file_name)
+                return re.sub('\.less$', '.min.wxss', file_name)
             else:
-                return re.sub('\.less$', '.css', file_name)
+                return re.sub('\.less$', '.wxss', file_name)
 
     def convert_one(self, is_auto_save=False):
         """
@@ -224,7 +224,7 @@ class Compiler:
 
         # Check if the CSS file should be written to the same folder as
         # where the LESS file is
-        css_dir = dirs['css']
+        css_dir = dirs['wxss']
         if dirs['same_dir']:
             # set the folder for the CSS file to the same
             # folder as the LESS file
@@ -232,7 +232,7 @@ class Compiler:
         elif dirs['shadow_folders']:
             print(
                 '[less2css] Using shadowed folders: outputting to {}'.format(
-                    dirs['css']
+                    dirs['wxss']
                 )
             )
             replacement = css_file_name.replace(
@@ -241,7 +241,7 @@ class Compiler:
             )
             # Strip off the slash this can cause issue within windows file paths
             css_dir = os.path.join(
-                dirs['css'],
+                dirs['wxss'],
                 os.path.dirname(replacement.strip('/').strip('\\'))
             )
         # get the file name of the CSS file, including the extension
@@ -393,14 +393,14 @@ class Compiler:
             # check if the file is located in a folder called less
             if current[1] == 'less':
                 # check if the less folder is located in a folder called css
-                if parent[1] == 'css':
+                if parent[1] == 'wxss':
                     # the current folder is less and the parent folder is css,
                     # set the css folder as the output dir
                     output_dir = current[0]
-                elif os.path.isdir(os.path.join(current[0], 'css')):
+                elif os.path.isdir(os.path.join(current[0], 'wxss')):
                     # the parent folder of less has a folder named css,
                     # make this the output dir
-                    output_dir = os.path.join(current[0], 'css')
+                    output_dir = os.path.join(current[0], 'wxss')
                 else:
                     # no conditions have been met, compile the file to the same
                     # folder as the less file is in
@@ -412,7 +412,7 @@ class Compiler:
             shadow_folders = True
             # replace last occurrence of less with css
             parts = base_dir.rsplit('less', 1)
-            output_dir = 'css'.join(parts)
+            output_dir = 'wxss'.join(parts)
 
         # find project path
         # you can have multiple folders at the top level in a project but
